@@ -5,14 +5,15 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Img3 from '../Images/Img3.jpg'
+import img from '../Images/Bg.jpg'
 
 const useStyles = makeStyles((theme) => ({
   mainFeaturedPost: {
     position: 'relative',
-    backgroundColor: theme.palette.grey[800],
+    backgroundColor: "inherit",
     color: theme.palette.common.white,
     marginBottom: theme.spacing(4),
-    backgroundImage: `url(${Img3})`,
+    backgroundImage: `url(${img})`,
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',

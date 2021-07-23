@@ -63,50 +63,58 @@ const useStyles = makeStyles((theme) => ({
 const cards = [1, 2, 3, 4, 5, 6];
 
 
-export default function Album() {
+export default function Album(props) {
   const classes = useStyles();
-
-  return (
-    <React.Fragment>
-      <CssBaseline />
-      <main style={{marginTop:"10px"}}>
-        {/* Hero unit */}
-        <DashboardNav/>
-        <Container className={classes.cardGrid} maxWidth="md" >
-          {/* End hero unit */}
-          <Grid container spacing={4}>
-            {cards.map((card) => (
-              <Grid item key={card} xs={12} sm={6} md={4}>
-                <Card className={classes.card}>
-                  <CardMedia
-                    className={classes.cardMedia}
-                    image={images[card-1]}
-                    title="Image title"
-                  />
-                  <CardContent className={classes.cardContent}>
-                    <Typography gutterBottom variant="h5" component="h2">
-                      {headings[card-1]}
-                    </Typography>
-                    <Typography>
-                      This is a media card. You can use this section to describe the content.
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
-                    <Button size="small" color="primary">
-                      View
-                    </Button>
-                    <Button size="small" color="primary">
-                      Buy
-                    </Button>
-                  </CardActions>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Container>
-      </main>
-      {/* Footer */}
-      {/* End footer */}
-    </React.Fragment>
-  );
+  if(props.info.length != 0){
+    return (
+      <React.Fragment>
+        <CssBaseline />
+        <main style={{marginTop:"10px"}}>
+          {/* Hero unit */}
+          <DashboardNav/>
+          <Container className={classes.cardGrid} maxWidth="md" >
+            {/* End hero unit */}
+            <Grid container spacing={4}>
+              {cards.map((card) => (
+                <Grid item key={card} xs={12} sm={6} md={4}>
+                  <Card className={classes.card}>
+                    <CardMedia
+                      className={classes.cardMedia}
+                      image={images[card-1]}
+                      title="Image title"
+                    />
+                    <CardContent className={classes.cardContent}>
+                      <Typography gutterBottom variant="h5" component="h2">
+                      {props.info[card-1][1]} 
+                      </Typography>
+                      <Typography>
+                       Rating
+                       <br/>
+                       {props.info[card-1][3]}
+                      </Typography>
+                    </CardContent>
+                    <CardActions>
+                      <Button size="small" color="primary">
+                        View
+                      </Button>
+                      <Button size="small" color="primary">
+                        Buy
+                      </Button>
+                    </CardActions>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+          </Container>
+        </main>
+        {/* Footer */}
+        {/* End footer */}
+      </React.Fragment>
+    );
+      
+  }
+  else{
+    <div>Loading</div>
+  }
+  
 }

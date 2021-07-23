@@ -1,6 +1,7 @@
 import React from 'react';
 import  { Breadcrumb, BreadcrumbItem, Card, CardBody, CardHeader, Media} from 'reactstrap';
 import bajaj from '../Images/bajaj.png'
+import img from '../Images/Bg.jpg'
 
 function MidSection() {
     return (

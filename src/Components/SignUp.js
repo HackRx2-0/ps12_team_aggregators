@@ -13,6 +13,35 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Axios from 'axios';
+import Album from './Dashboard';
+import MenuItem from '@material-ui/core/MenuItem';
+
+const genders = [
+  {
+    value: 'Male',
+    label: 'Male',
+  },
+  {
+    value: 'Female',
+    label: 'Female',
+  },
+  {
+    value: 'Other',
+    label: 'Other',
+  },
+];
+
+const martialstatus = [
+  {
+    value: 'Single',
+    label: 'Single',
+  },
+  {
+    value: 'Married',
+    label: 'Married',
+  },
+ 
+];
 
 function Copyright() {
   return (
@@ -47,6 +76,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
 export default function SignUp() {
   const classes = useStyles();
 
@@ -54,6 +84,13 @@ export default function SignUp() {
   const [lastname,lastnameReg] = useState("")
   const [email,setmailReg] = useState("")
   const [password,passwordReg] = useState("")
+  const [active,setActive] = useState(false);
+  const [state,setState] = useState([]);
+  const [show,setShow] = useState(false);
+  const [gender, setGender] = React.useState('Male');
+  const [martstatus, setMartstatus] = React.useState('Single');
+  const [Age,setAge] = React.useState(1);
+
 
   const firstnameHandler = (e)=>{
     firstnameReg(e.target.value)
@@ -69,27 +106,58 @@ export default function SignUp() {
   const passsaveHandler = (e)=>{
     passwordReg(e.target.value)
   }
+  const handleChange1 = (event) => {
+    setGender(event.target.value);
+  };
+  const handleChange = (event) => {
+    setMartstatus(event.target.value);
+  };
+
+  const AgeHandler = (event)=>{
+      setAge(event.target.value);
+  }
 
   const saveDetails = (e)=>{
     e.preventDefault()
     const obj = {
       "name":firstname+" "+lastname,
       'email':email,
-      'password':password
+      'password':password,
+      'age':Age
     }
     console.log(obj)
     Axios.post('http://localhost:3001/users',obj).then((response)=>{
       console.log(response)
       if(response.status===201){
-        window.location.href="/dashboard"
+        //window.location.href="/dashboard"
+        Axios.post('http://127.0.0.1:8000/predict/res',{
+      
+        }).then(function (response){
+          
+          console.log(response);
+          console.log(response.data.response + " " + response.status);
+          window.alert(response.data.response + " " + response.status);
+          setState(response.data.response);
+          setShow(true);
+          
+        })
+        .catch(function(error){
+          console.log(error);
+        })
+        setActive(true);
       }
     }).catch((e)=>{
       console.log(e)
     })
   }
+ 
 
   return (
-    <Container component="main" maxWidth="xs">
+    <div>
+
+    {!show
+      ?
+      <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -123,6 +191,60 @@ export default function SignUp() {
                 name="lastName"
                 autoComplete="lname"
                 onChange={lastnameHandler}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+            <TextField
+              id="filled-select-currency-native"
+              select
+              label="Martial status select"
+              value={martstatus}
+              onChange={handleChange}
+              SelectProps={{
+              native: true,
+                       }}
+             helperText="Please select your Martial status"
+            variant="outlined"
+                      >
+           {martialstatus.map((option) => (
+              <option key={option.value} value={option.value}>
+               {option.label}
+              </option>
+            ))}
+          </TextField>
+           
+            </Grid>
+            <Grid item xs={12} sm={6}>
+            <TextField
+          id="filled-select-currency-native"
+          select
+          label="Gender select"
+          value={gender}
+          onChange={handleChange1}
+          SelectProps={{
+            native: true,
+          }}
+          helperText="Please select your gender"
+          variant="outlined"
+        >
+          {genders.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </TextField>
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                type="number"
+                id="Age"
+                label="Age"
+                name="Age"
+                autoComplete="Age"
+                onChange={(e)=>{AgeHandler(e)}}
               />
             </Grid>
             <Grid item xs={12}>
@@ -180,5 +302,8 @@ export default function SignUp() {
         <Copyright />
       </Box>
     </Container>
+    
+     :<Album info={state}/>}
+    </div>
   );
 }

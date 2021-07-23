@@ -13,6 +13,11 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Axios from 'axios';
+import Album from './Dashboard'
+import {useHistory} from 'react-router-dom';
+import Dashboard from './Dashboard1';
+
+
 
 function Copyright() {
   return (
@@ -49,10 +54,13 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignIn() {
   const classes = useStyles();
-
+  const history = useHistory();
+ 
   const [email,setmailReg] = useState("")
   const [password,passwordReg] = useState("")
-
+  const [active,setActive] = useState(false)
+  const [data,setData] = useState([])
+ 
   const sendDetails = ()=>{
     console.log(email)
     console.log(password)
@@ -62,7 +70,14 @@ export default function SignIn() {
     }).then((response)=>{
       console.log(response)
       if(response.data.ret){
-        window.location.href="/dashboard"
+         Axios.post("http://127.0.0.1:8000/predict/res1",{
+           'name':response.data.user.name
+         }).then((response)=>{
+           console.log(response)
+           setActive(true)
+           setData(response.data.resp)
+         })
+        //window.location.href="/dashboard"
       }else{
         alert("User not found please signup")
         window.location.href = "/signup"
@@ -71,6 +86,7 @@ export default function SignIn() {
       console.log(e)
     })
   }
+  
 
   const emailsaveHandler = (e)=>{
     setmailReg(e.target.value)
@@ -81,71 +97,81 @@ export default function SignIn() {
   }
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign in
-        </Typography>
-        <form className={classes.form} noValidate >
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            onChange={(e)=>emailsaveHandler(e)}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            onChange = {(e)=>{passsaveHandler(e)}}
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
-          <Button
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            // onClick={event=>window.location.href="/dashboard"}
-            onClick = {sendDetails}
-          >
-            Sign In
-          </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link href="/signup" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
-          </Grid>
-        </form>
-      </div>
-      <Box mt={8}>
-        <Copyright />
-      </Box>
-    </Container>
+       <div>
+          {!active
+          ?
+          <Container component="main" maxWidth="xs">
+          <CssBaseline />
+          <div className={classes.paper}>
+            <Avatar className={classes.avatar}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Sign in
+            </Typography>
+            <form className={classes.form} noValidate >
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                autoFocus
+                onChange={(e)=>emailsaveHandler(e)}
+              />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                onChange = {(e)=>{passsaveHandler(e)}}
+              />
+              <FormControlLabel
+                control={<Checkbox value="remember" color="primary" />}
+                label="Remember me"
+              />
+              <Button
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+                // onClick={event=>window.location.href="/dashboard"}
+                onClick = {sendDetails}
+              >
+                Sign In
+              </Button>
+              <Grid container>
+                <Grid item xs>
+                  <Link href="#" variant="body2">
+                    Forgot password?
+                  </Link>
+                </Grid>
+                <Grid item>
+                  <Link href="/signup" variant="body2">
+                    {"Don't have an account? Sign Up"}
+                  </Link>
+                </Grid>
+              </Grid>
+            </form>
+          </div>
+          <Box mt={8}>
+            <Copyright />
+          </Box>
+        </Container>
+
+          : <Dashboard info={data}/>}
+
+       </div>
   );
+
+   
+   
 }

@@ -6,6 +6,6 @@ import mutual from '../Images/mutualfunds.jpg';
 import health from '../Images/Health.jpg';
 
 
-const images = [car,creditcard,home,loan,mutual,health];
+const images = [loan,car,creditcard,mutual,health,home]
 
 export default images;
