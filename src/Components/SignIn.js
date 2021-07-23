@@ -60,6 +60,7 @@ export default function SignIn() {
   const [password,passwordReg] = useState("")
   const [active,setActive] = useState(false)
   const [data,setData] = useState([])
+  const [name,setName] = useState("")
  
   const sendDetails = ()=>{
     console.log(email)
@@ -74,8 +75,10 @@ export default function SignIn() {
            'name':response.data.user.name
          }).then((response)=>{
            console.log(response)
-           setActive(true)
            setData(response.data.resp)
+           setName(response.data.name)
+           setActive(true)
+        
          })
         //window.location.href="/dashboard"
       }else{
@@ -167,7 +170,7 @@ export default function SignIn() {
           </Box>
         </Container>
 
-          : <Dashboard info={data}/>}
+          : <Dashboard info={data} name={name}/>}
 
        </div>
   );

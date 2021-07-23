@@ -136,7 +136,6 @@ export default function SignUp() {
           
           console.log(response);
           console.log(response.data.response + " " + response.status);
-          window.alert(response.data.response + " " + response.status);
           setState(response.data.response);
           setShow(true);
           

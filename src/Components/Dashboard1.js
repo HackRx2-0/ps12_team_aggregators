@@ -1,7 +1,5 @@
 import React from 'react';
-import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
-import CameraIcon from '@material-ui/icons/PhotoCamera';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -13,26 +11,16 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
-import images from '../Properties/images';
+import images from '../Properties/images'
+import dashBack from '../Images/dashBackground.jpg'
 import DashboardNav from './DashBoardNav';
-
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-}
-
-shuffleArray(images)
-
-function randomInteger(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-let num = randomInteger(0,6)
+import  CardHeader  from '@material-ui/core/CardHeader';
+import  ExpandMoreIcon  from '@material-ui/icons/ExpandMore';
+import Sig from '../Images/SignIn.jpg';
 
 function Copyright() {
   return (
-    <Typography variant="body2" color="textSecondary" align="center">
+    <Typography variant="body2" color="textPrimary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="https://material-ui.com/">
         Your Website
@@ -55,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(4),
   },
   cardGrid: {
-    paddingTop: theme.spacing(8),
+    paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(8),
   },
   card: {
@@ -75,70 +63,83 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-var len = -1;
-
+const cards = [0,1,2,3,4,5];
 
 export default function Dashboard(props) {
-
   const classes = useStyles();
-  if(props.info.length != 0){
+  if(props.info != undefined){
     return (
         <React.Fragment>
           <CssBaseline />
           <DashboardNav/>
+          <div style={{backgroundImage:`url(${Sig})`}}>
           <main>
             {/* Hero unit */}
-           
+            <div className={classes.heroContent} style={{backgroundImage:`url(${Sig})`}}>
+              <Container maxWidth="sm">
+                <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
+                </Typography>
+                <Typography  style={{color:"white"}} variant="h2" align="center" color="textSecondary" paragraph>
+                 Welcome back {props.name} , here are some  recommendations with highest ratings 
+                </Typography>
+                <div className={classes.heroButtons}>
+                  <Grid container spacing={2} justifyContent="center">
+                    <Grid item>
+                    </Grid>
+                  </Grid>
+                </div>
+              </Container>
+            </div>
             <Container className={classes.cardGrid} maxWidth="md">
               {/* End hero unit */}
-              <Grid container spacing={4}>
-                {props.info.map((card) => (
-                  <Grid item key={card.name} xs={12} sm={6} md={4}>
-                    {len++}
-                    <Card className={classes.card}>
-                      <CardMedia
-                        className={classes.cardMedia}
-                        image={images[num]}
-                        title="Image title"
-                      />
-                      <CardContent className={classes.cardContent}>
-                        <Typography gutterBottom variant="h5" component="h2">
-                          {card.name}
-                        </Typography>
-                        <Typography>
-                            Rating
-                            <br/>
-                           {card.est}
-                        </Typography>
-                      </CardContent>
-                      <CardActions>
-                        <Button size="small" color="primary">
-                          View
-                        </Button>
-                        <Button size="small" color="primary">
-                          Buy
-                        </Button>
-                      </CardActions>
-                    </Card>
+              <Grid container spacing={10}>
+                {cards.map((card) => (
+                  <Grid item key={card} xs={12} sm={6} md={4}>
+                    <Card className={classes.root}>
+      <CardHeader
+        title={props.info[card].name}
+        variant="h1"
+      />
+      <hr style={{color:"black"}}/>
+      <CardMedia
+        className={classes.media}
+        image="https://source.unsplash.com/random"
+        title=""
+      />
+      <CardContent>
+        <Typography variant="body2" color="textSecondary" component="p">
+          <h3> This is the {card+1} top most recommendation for you {props.name} . </h3>
+          <h3>Rating-</h3>
+          <h4>{props.info[card].est}</h4>
+          
+        </Typography>
+      </CardContent>
+      <CardActions disableSpacing>
+        <Button aria-label="add to favorites">
+          Buy
+        </Button>
+        <Button aria-label="share">
+           View
+        </Button>
+        <Button
+          
+        >
+          <ExpandMoreIcon />
+        </Button>
+      </CardActions>
+    
+    </Card>
                   </Grid>
                 ))}
               </Grid>
             </Container>
           </main>
+          </div>
           {/* Footer */}
-          <footer className={classes.footer}>
-            <Typography variant="h6" align="center" gutterBottom>
-              Footer
-            </Typography>
-            <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
-              Something here to give the footer a purpose!
-            </Typography>
-            <Copyright />
-          </footer>
           {/* End footer */}
         </React.Fragment>
       );
-   
+
   }
   else{
       return(
@@ -147,6 +148,5 @@ export default function Dashboard(props) {
           </div>
       )
   }
-
  
 }
